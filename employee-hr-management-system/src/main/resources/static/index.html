@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PeopleHub HR Management</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+    <aside class="sidebar">
+        <div class="brand"><div class="logo">P</div><div><strong>PeopleHub</strong><small>HR Management</small></div></div>
+        <nav>
+            <button class="nav active" data-section="dashboard">⌂ <span>Dashboard</span></button>
+            <button class="nav" data-section="employees">♙ <span>Employees</span></button>
+            <button class="nav" data-section="leave">▣ <span>Leave</span></button>
+            <button class="nav" data-section="payroll">▤ <span>Payroll</span></button>
+            <button class="nav" data-section="assistant">✦ <span>AI Assistant</span></button>
+        </nav>
+        <div class="system">● System online<br><small>Connected to Spring Boot API</small></div>
+    </aside>
+
+    <main class="main">
+        <header class="topbar">
+            <div><p class="eyebrow">PEOPLE OPERATIONS</p><h1 id="pageTitle">HR Dashboard</h1></div>
+            <button class="primary" onclick="openEmployeeModal()">+ Add employee</button>
+        </header>
+
+        <div id="message"></div>
+
+        <section id="dashboard" class="section active">
+            <div class="cards">
+                <div class="card"><span>Employees</span><strong id="employeesCount">-</strong><small>Total employees</small></div>
+                <div class="card"><span>Active employees</span><strong id="activeCount">-</strong><small>Currently active</small></div>
+                <div class="card"><span>Departments</span><strong id="departmentsCount">-</strong><small>Business units</small></div>
+                <div class="card"><span>Pending leave</span><strong id="pendingLeave">-</strong><small>Awaiting approval</small></div>
+            </div>
+            <div class="grid2">
+                <div class="panel">
+                    <div class="panelHead"><div><p class="eyebrow">WORKFORCE</p><h2>Employee overview</h2></div></div>
+                    <div id="dashboardEmployees" class="miniList"></div>
+                </div>
+                <div class="panel">
+                    <div class="panelHead"><div><p class="eyebrow">PAYROLL</p><h2>Payroll snapshot</h2></div></div>
+                    <div class="payrollSnapshot"><span>Recorded net payroll</span><strong id="payrollTotal">R 0.00</strong></div>
+                    <p class="muted">Calculated from processed payroll records in H2.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="employees" class="section">
+            <div class="toolbar">
+                <input id="employeeSearch" placeholder="Search name, email or employee number" oninput="loadEmployees()">
+                <select id="departmentFilter" onchange="loadEmployees()"><option value="">All departments</option></select>
+            </div>
+            <div class="panel"><table><thead><tr><th>Employee</th><th>Department</th><th>Job title</th><th>Salary</th><th>Status</th><th></th></tr></thead><tbody id="employeeTable"></tbody></table></div>
+        </section>
+
+        <section id="leave" class="section">
+            <div class="toolbar"><button class="primary" onclick="openLeaveModal()">+ Request leave</button></div>
+            <div class="panel"><table><thead><tr><th>Employee</th><th>Dates</th><th>Type</th><th>Status</th><th></th></tr></thead><tbody id="leaveTable"></tbody></table></div>
+        </section>
+
+        <section id="payroll" class="section">
+            <div class="toolbar"><button class="primary" onclick="openPayrollModal()">+ Process payroll</button></div>
+            <div class="panel"><table><thead><tr><th>Employee</th><th>Period</th><th>Basic</th><th>Allowances</th><th>Deductions</th><th>Net salary</th></tr></thead><tbody id="payrollTable"></tbody></table></div>
+        </section>
+        <section id="assistant" class="section">
+            <div class="assistantGrid">
+                <div class="panel assistantPanel">
+                    <div class="panelHead"><div><p class="eyebrow">SMART HR ASSISTANT</p><h2>Ask about your HR data</h2></div><span class="aiDot">● Online</span></div>
+                    <div id="chatMessages" class="chatMessages">
+                        <div class="chat assistant"><strong>HR Assistant</strong><p>Hi! Ask me about employees, pending leave, payroll or departments.</p></div>
+                    </div>
+                    <form class="chatForm" onsubmit="askAssistant(event)">
+                        <input id="assistantQuestion" autocomplete="off" placeholder="e.g. How many active employees are there?" required>
+                        <button class="primary" type="submit">Ask</button>
+                    </form>
+                    <div class="suggestions">
+                        <button onclick="askSuggestion('How many active employees are there?')">Active employees</button>
+                        <button onclick="askSuggestion('Who has pending leave?')">Pending leave</button>
+                        <button onclick="askSuggestion('What is the total payroll?')">Total payroll</button>
+                        <button onclick="askSuggestion('What departments do we have?')">Departments</button>
+                    </div>
+                </div>
+                <div class="panel insightsPanel">
+                    <div class="panelHead"><div><p class="eyebrow">AUTOMATED INSIGHTS</p><h2>HR snapshot</h2></div></div>
+                    <div id="aiInsights" class="insights"><div class="loading">Loading insights...</div></div>
+                </div>
+            </div>
+            <div class="panel aiNote"><strong>How it works</strong><span>The assistant uses Spring Boot services and the H2 HR data to interpret common HR questions and return live answers. No external API key is required.</span></div>
+        </section>
+
+    </main>
+</div>
+
+<div id="modal" class="modal hidden"><div class="modalBox"><button class="close" onclick="closeModal()">×</button><div id="modalContent"></div></div></div>
+<script src="app.js"></script>
+</body>
+</html>
